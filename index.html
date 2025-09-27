@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 2nd Monthsary!</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
+        
+        :root {
+            --primary-pink: #ff9ec5;
+            --light-pink: #ffd6e7;
+            --dark-pink: #ff7eb3;
+            --soft-blue: #b8e0ff;
+            --pastel-yellow: #fff9c4;
+            --pastel-purple: #e1bee7;
+            --soft-green: #c8e6c9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--light-pink) 0%, var(--soft-blue) 100%);
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--light-pink) 0%, var(--soft-blue) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease;
+        }
+        
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+        
+        .loading-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .loading-animation {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        
+        .loading-heart {
+            position: absolute;
+            font-size: 50px;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .loading-heart:nth-child(1) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .loading-heart:nth-child(2) {
+            animation-delay: 0.5s;
+            font-size: 40px;
+            top: 30px;
+            left: 40px;
+        }
+        
+        .loading-heart:nth-child(3) {
+            animation-delay: 1s;
+            font-size: 35px;
+            top: 120px;
+            left: 20px;
+        }
+        
+        .loading-heart:nth-child(4) {
+            animation-delay: 0.7s;
+            font-size: 30px;
+            top: 80px;
+            left: 150px;
+        }
+        
+        .loading-bar-container {
+            width: 350px;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .loading-bar {
+            height: 100%;
+            background: linear-gradient(90deg, white, var(--pastel-yellow));
+            width: 0%;
+            border-radius: 15px;
+            transition: width 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loading-bar:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        .loading-percent {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-top: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Envelope Section */
+        .envelope-section {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            animation: fadeIn 1s ease;
+            width: 100%;
+        }
+        
+        .envelope-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: bounce 2s infinite;
+        }
+        
+        .envelope-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            max-width: 500px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            cursor: pointer;
+            margin: 20px 0;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #ff7eb3;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s ease;
+            z-index: 2;
+        }
+        
+        .envelope:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 110px solid #ff66a3;
+            z-index: 3;
+        }
+        
+        .envelope:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ff66a3;
+            border-radius: 10px;
+            z-index: 1;
+            transform: scale(0.9);
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ff4d94;
+            border-radius: 10px 10px 0 0;
+            transform-origin: top;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 4;
+        }
+        
+        .envelope-flap:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 110px solid #ff3385;
+            z-index: 5;
+        }
+        
+        .letter {
+            position: absolute;
+            width: 90%;
+            height: 85%;
+            background: white;
+            border-radius: 5px;
+            top: 10%;
+            left: 5%;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(100%);
+            transition: transform 0.8s ease 0.4s;
+            color: #333;
+        }
+        
+        .letter h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            color: var(--primary-pink);
+            margin-bottom: 15px;
+        }
+        
+        .letter p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            text-align: center;
+        }
+        
+        .envelope-container.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+        
+        .envelope-container.open .letter {
+            transform: translateY(0);
+        }
+        
+        .envelope-container:hover .envelope {
+            transform: translateY(-10px) scale(1.05);
+        }
+        
+        .envelope-instruction {
+            margin-top: 30px;
+            font-size: 1.1rem;
+            animation: pulse 2s infinite;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 30px;
+        }
+        
+        /* Card Section */
+        .card-section {
+            display: none;
+            width: 90%;
+            max-width: 700px;
+            background: white;
+            border-radius: 25px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            animation: fadeIn 1.5s ease;
+            position: relative;
+            overflow: hidden;
+            border: 15px solid white;
+        }
+        
+        .card-section:before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, var(--primary-pink), var(--soft-blue), var(--pastel-yellow));
+            z-index: -1;
+            border-radius: 35px;
+            animation: gradientShift 8s ease infinite;
+        }
+        
+        .card-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: var(--primary-pink);
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: bounce 3s infinite;
+        }
+        
+        .card-message {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: #555;
+            text-align: center;
+            margin: 25px 0;
+            padding: 30px;
+            background: rgba(255, 214, 231, 0.2);
+            border-radius: 20px;
+            border-left: 5px solid var(--primary-pink);
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .card-message:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-message:before {
+            content: '"';
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            color: var(--primary-pink);
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            opacity: 0.3;
+        }
+        
+        .card-message:after {
+            content: '"';
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            color: var(--primary-pink);
+            position: absolute;
+            bottom: -40px;
+            right: 20px;
+            opacity: 0.3;
+        }
+        
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: var(--primary-pink);
+            opacity: 0.7;
+            animation: float 5s infinite ease-in-out;
+        }
+        
+        .sparkle {
+            position: absolute;
+            font-size: 15px;
+            color: gold;
+            animation: sparkle 2s infinite;
+            pointer-events: none;
+        }
+        
+        .footer-note {
+            margin-top: 30px;
+            font-style: italic;
+            color: #888;
+            font-size: 1.1rem;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        
+        .restart-btn {
+            background: linear-gradient(45deg, var(--primary-pink), var(--soft-blue));
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .loading-title {
+                font-size: 2.8rem;
+            }
+            
+            .envelope-title {
+                font-size: 2.5rem;
+            }
+            
+            .envelope-container {
+                width: 280px;
+                height: 190px;
+            }
+            
+            .envelope:before {
+                border-left: 140px solid transparent;
+                border-right: 140px solid transparent;
+                border-top: 95px solid #ff66a3;
+            }
+            
+            .envelope-flap:before {
+                border-left: 140px solid transparent;
+                border-right: 140px solid transparent;
+                border-top: 95px solid #ff3385;
+            }
+            
+            .card-title {
+                font-size: 2.8rem;
+            }
+            
+            .card-message {
+                font-size: 1.1rem;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .loading-title {
+                font-size: 2.2rem;
+            }
+            
+            .loading-bar-container {
+                width: 280px;
+            }
+            
+            .envelope-title {
+                font-size: 2rem;
+            }
+            
+            .envelope-subtitle {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+            
+            .envelope-container {
+                width: 240px;
+                height: 160px;
+            }
+            
+            .envelope:before {
+                border-left: 120px solid transparent;
+                border-right: 120px solid transparent;
+                border-top: 80px solid #ff66a3;
+            }
+            
+            .envelope-flap:before {
+                border-left: 120px solid transparent;
+                border-right: 120px solid transparent;
+                border-top: 80px solid #ff3385;
+            }
+            
+            .card-section {
+                padding: 30px 20px;
+            }
+            
+            .card-title {
+                font-size: 2.2rem;
+            }
+            
+            .card-message {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-animation">
+                <div class="loading-heart"><i class="fas fa-heart"></i></div>
+                <div class="loading-heart"><i class="fas fa-heart"></i></div>
+                <div class="loading-heart"><i class="fas fa-heart"></i></div>
+                <div class="loading-heart"><i class="fas fa-heart"></i></div>
+            </div>
+            <h1 class="loading-title">Wrapping Up Something Special...</h1>
+            <div class="loading-bar-container">
+                <div class="loading-bar" id="loadingBar"></div>
+            </div>
+            <div class="loading-percent" id="loadingPercent">0%</div>
+        </div>
+    </div>
+    
+    <!-- Envelope Section -->
+    <div class="envelope-section" id="envelopeSection">
+        <h1 class="envelope-title">You've Got Mail! 💌</h1>
+        <p class="envelope-subtitle">A special message is waiting just for you</p>
+        <div class="envelope-container" id="envelopeContainer">
+            <div class="envelope">
+                <div class="envelope-flap"></div>
+            </div>
+            <div class="letter">
+                <h2>Happy 2nd Monthsary!</h2>
+                <p>Open me to read your message</p>
+            </div>
+        </div>
+        <p class="envelope-instruction">Click the envelope to open</p>
+    </div>
+    
+    <!-- Card Section -->
+    <div class="card-section" id="cardSection">
+        <h1 class="card-title">Happy 2nd Monthsary, My Love! 💕</h1>
+        
+        <div class="card-message">
+            <p>Happy 2nd monthsary, my baby. 💕 These past two months have been so full of laughter, warmth, and little moments that I'll never forget. It amazes me how quickly time flies when I'm with you, and yet I wish it would slow down so I could hold on to every second we share. Being with you has been both the sweetest blessing and the soft ache of knowing that no matter how much time we get, it'll never feel like enough. Thank you for making my days brighter, my nights softer, and my heart fuller. Here's to us—growing, learning, and loving even through the bittersweet moments.</p>
+        </div>
+        
+        <p class="footer-note">With all my love, today and always</p>
+        <button class="restart-btn" onclick="location.reload()">
+            <i class="fas fa-redo"></i> Watch Again
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Create floating hearts
+        function createHearts() {
+            const heartsContainer = document.getElementById('heartsContainer');
+            const heartCount = 30;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '<i class="fas fa-heart"></i>';
+                heart.classList.add('heart');
+                
+                // Random position and animation delay
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = Math.random() * 100 + 'vh';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.color = getRandomColor();
+                
+                heartsContainer.appendChild(heart);
+            }
+        }
+        
+        // Get random pastel color
+        function getRandomColor() {
+            const colors = ['#ff9ec5', '#ffd6e7', '#b8e0ff', '#fff9c4', '#e1bee7', '#c8e6c9'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // Create sparkles for the card
+        function createSparkles() {
+            const cardSection = document.getElementById('cardSection');
+            const sparkleCount = 15;
+            
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.innerHTML = '<i class="fas fa-star"></i>';
+                sparkle.classList.add('sparkle');
+                
+                // Random position
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                sparkle.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                
+                cardSection.appendChild(sparkle);
+            }
+        }
+        
+        // Simulate loading progress
+        function simulateLoading() {
+            const loadingBar = document.getElementById('loadingBar');
+            const loadingPercent = document.getElementById('loadingPercent');
+            let width = 0;
+            
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    // Hide loading screen and show envelope after a short delay
+                    setTimeout(() => {
+                        document.getElementById('loadingScreen').style.opacity = '0';
+                        setTimeout(() => {
+                            document.getElementById('loadingScreen').style.display = 'none';
+                            document.getElementById('envelopeSection').style.display = 'flex';
+                        }, 1000);
+                    }, 500);
+                } else {
+                    width += Math.random() * 8 + 2;
+                    if (width > 100) width = 100;
+                    loadingBar.style.width = width + '%';
+                    loadingPercent.textContent = Math.round(width) + '%';
+                }
+            }, 200);
+        }
+        
+        // Handle envelope opening
+        function setupEnvelope() {
+            const envelopeContainer = document.getElementById('envelopeContainer');
+            
+            envelopeContainer.addEventListener('click', function() {
+                this.classList.add('open');
+                
+                // Add opening sound effect (visual)
+                const openEffect = document.createElement('div');
+                openEffect.innerHTML = '<i class="fas fa-sparkles"></i>';
+                openEffect.style.position = 'absolute';
+                openEffect.style.top = '50%';
+                openEffect.style.left = '50%';
+                openEffect.style.transform = 'translate(-50%, -50%)';
+                openEffect.style.fontSize = '50px';
+                openEffect.style.color = 'gold';
+                openEffect.style.zIndex = '10';
+                openEffect.style.animation = 'pulse 0.5s';
+                envelopeContainer.appendChild(openEffect);
+                
+                // Remove effect after animation
+                setTimeout(() => {
+                    openEffect.remove();
+                }, 500);
+                
+                // Show card after envelope animation completes
+                setTimeout(() => {
+                    document.getElementById('envelopeSection').style.display = 'none';
+                    document.getElementById('cardSection').style.display = 'block';
+                    createSparkles();
+                    
+                    // Add floating elements to card
+                    setTimeout(createHearts, 500);
+                }, 1200);
+            });
+        }
+        
+        // Add some interactive elements to the card
+        function setupCardInteractions() {
+            const cardMessage = document.querySelector('.card-message');
+            
+            cardMessage.addEventListener('click', function() {
+                this.style.transform = 'scale(1.02)';
+                this.style.transition = 'transform 0.3s';
+                
+                // Create a small heart animation
+                const heart = document.createElement('div');
+                heart.innerHTML = '<i class="fas fa-heart"></i>';
+                heart.style.position = 'absolute';
+                heart.style.color = 'var(--primary-pink)';
+                heart.style.fontSize = '20px';
+                heart.style.animation = 'float 2s ease-out';
+                heart.style.pointerEvents = 'none';
+                heart.style.left = Math.random() * 80 + 10 + '%';
+                heart.style.top = '50%';
+                cardMessage.appendChild(heart);
+                
+                // Remove heart after animation
+                setTimeout(() => {
+                    heart.remove();
+                }, 2000);
+                
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 300);
+            });
+        }
+        
+        // Initialize everything when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            createHearts();
+            simulateLoading();
+            setupEnvelope();
+            setupCardInteractions();
+        });
+    </script>
+</body>
+</html>
